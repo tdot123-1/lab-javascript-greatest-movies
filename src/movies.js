@@ -40,13 +40,67 @@ function dramaMoviesScore(moviesArray) {
 }
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
-function orderByYear(moviesArray) {}
+function orderByYear(moviesArray) {
+    const orderedArr = moviesArray.toSorted((a, b) => {
+       if (a.year === b.year) {
+        return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+       }
+       return a.year - b.year;
+    });
+
+    return orderedArr;
+}
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
-function orderAlphabetically(moviesArray) {}
+function orderAlphabetically(moviesArray) {
+    const orderedArr = moviesArray.toSorted((a, b) => 
+                        a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
+                        .map(movie => movie.title)
+                        .filter((movie, movieIndex) => movieIndex < 20);
+
+    return orderedArr;
+}
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
-function turnHoursToMinutes(moviesArray) {}
+function turnHoursToMinutes(moviesArray) {
+    
+}
 
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
-function bestYearAvg(moviesArray) {}
+function bestYearAvg(moviesArray) {
+    let bestAvg = 0;
+
+    // get array ofall unique years 
+    const yearsArr = moviesArray.map(movie => movie.year)
+                    .filter((year, index, arr) => (arr.indexOf(year) === index));
+    
+    // get array of all sums by year
+    const sumsArr = yearsArr.map((year) => {
+        const totalScore =  moviesArray.filter(movie => (movie.year === year))
+                            .reduce((acc, movie) => acc + movie.score, 0);
+        const totalMovies = moviesArray.filter(movie => (movie.year === year))
+                            .reduce((acc, movie) => acc + 1, 0);
+        return {
+            "year": year,
+            "totalScore": totalScore,
+            "totalMovies": totalMovies,
+        }
+    });
+    
+
+    // get total movies per year
+
+
+
+    // const sumsArr = [];
+
+    /*
+    yearsArr.forEach(year => {
+        moviesArray.forEach(movie => {
+            if (movie.year === year) {
+                
+            }
+        });
+    });
+    */
+}

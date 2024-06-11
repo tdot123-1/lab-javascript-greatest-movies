@@ -72,21 +72,26 @@ function orderAlphabetically(moviesArray) {
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(moviesArray) {
-    // could use some rework, check for errors etc
+    // UPDATED
 
-    // assuming all duration properties have the same format, split on space for h and m
+    // assuming all duration properties have the same format,
     const newArr = moviesArray.map(movie => {
-        const timeArr = movie.duration.split(" ");
         let totalMin = 0;
-        // if resulting array is length 2: the movie has both hours and minutes
-        if (timeArr.length === 2) {
-            const minStr = timeArr[1].slice(0, timeArr[1].indexOf("m"));
-            const minInt = parseInt(minStr);
-            totalMin += minInt;
+        // check if duration is at least 1 hour
+        if (movie.duration.includes("h")) {
+            // parse int from substring from start to "h" char
+            totalMin += parseInt(
+                movie.duration.slice(0, movie.duration.indexOf("h"))
+            ) * 60;
         }
-        const hoursStr = timeArr[0].slice(0, timeArr[0].indexOf("h"));
-        const hoursInt = parseInt(hoursStr);
-        totalMin += (hoursInt * 60);
+        // check if movie has additional minutes
+        if (movie.duration.includes("m")) {
+            // parse int from substring from " " separation with hours to "m" char
+            totalMin += parseInt(
+                movie.duration.slice(movie.duration.indexOf(" "), movie.duration.indexOf("m"))
+            );
+        }
+        // update duration for new array
         return {
             "title": movie.title,
             "year": movie.year,

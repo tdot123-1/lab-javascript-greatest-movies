@@ -107,53 +107,51 @@ function turnHoursToMinutes(moviesArray) {
 
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
 function bestYearAvg(moviesArray) {
-    
+    // UPDATED
 
-    // try to optimize, remove unnecessary steps, repeated lines
-    
+    // check for empty array
     if (moviesArray.length === 0) {
         return null;
     }
-    
+    // set object to save best avg
     const bestAvg = {
         "year": null,
         "average": 0,
     };
 
-    // get array ofall unique years 
+    // get array of all unique years 
     const yearsArr = moviesArray.map(movie => movie.year)
                     .filter((year, index, arr) => (arr.indexOf(year) === index));
     
-    // get array of all sums by year
-    const sumsArr = yearsArr.map((year) => {
-        const totalScore =  moviesArray.filter(movie => (movie.year === year))
-                            .reduce((acc, movie) => acc + movie.score, 0);
-        const totalMovies = moviesArray.filter(movie => (movie.year === year)) // !repeated line 
-                            .reduce((acc, movie) => acc + 1, 0);
+    // get array of all average scores by year
+    const averagesArr = yearsArr.map((year) => {
+        // use reduce to get both total score and total movies filtered by year
+        const {totalScore, totalMovies } =  moviesArray.filter(movie => (movie.year === year))
+                            .reduce((acc, movie) => {
+                                acc.totalScore += movie.score;
+                                acc.totalMovies += 1;
+                                return acc;
+                            }, {"totalScore": 0, "totalMovies": 0});
+        
+        // calculate average for year, store in object, add to array
+        const averageScore = totalScore / totalMovies;
         return {
             "year": year,
-            "totalScore": totalScore,
-            "totalMovies": totalMovies,
-        }
-    });
-
-    // get array for average scores per year (maybe can be included in previous map)
-    const avgArr = sumsArr.map(year => {
-        return {
-            "year": year.year,
-            "average": year.totalScore / year.totalMovies,
+            "average": averageScore,
         };
     });
 
+    
     // find highest average
-    avgArr.forEach(item => {
-        if (item.average > bestAvg.average) {
-            bestAvg.year = item.year;
-            bestAvg.average = item.average;
+    averagesArr.forEach(year => {
+        if (year.average > bestAvg.average) {
+            bestAvg.year = year.year;
+            bestAvg.average = year.average;
         }
-        else if (item.average === bestAvg.average && item.year < bestAvg.year) {
-            bestAvg.year = item.year;
-            bestAvg.average = item.average;
+        // if average is equal, compare years
+        else if (year.average === bestAvg.average && year.year < bestAvg.year) {
+            bestAvg.year = year.year;
+            bestAvg.average = year.average;
         } 
     });
 
